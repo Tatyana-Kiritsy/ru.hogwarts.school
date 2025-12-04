@@ -1,11 +1,8 @@
 package ru.hogwarts.school.controller;
 
-import jakarta.validation.constraints.NotBlank;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.model.Faculty;
-
 import ru.hogwarts.school.service.FacultyService;
-
 import java.util.Collection;
 
 
@@ -39,13 +36,16 @@ public class FacultyController {
     }
 
     @GetMapping("/filter")
-    public Collection<Faculty> filterByColor(@RequestParam @NotBlank String color) {
-        return facultyService.findByColor(color);
+    public Collection<Faculty> filterByColorOrName(@RequestParam(required = false)
+                                                   String color, @RequestParam(required = false)
+                                                   String name) {
+        return facultyService.findByColorOrName(color, name);
     }
 
     @GetMapping
     public Collection<Faculty> allFacultiesInfo() {
         return facultyService.getAllFaculties();
     }
+
 }
 
