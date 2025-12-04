@@ -5,7 +5,6 @@ import ru.hogwarts.school.exception.FacultyNotFoundException;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.repository.FacultyRepository;
 
-
 import java.util.*;
 
 @Service

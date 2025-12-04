@@ -5,7 +5,6 @@ import ru.hogwarts.school.exception.FacultyNameByStudentIdNotFoundException;
 import ru.hogwarts.school.exception.StudentNotFoundException;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.StudentRepository;
-
 import java.util.*;
 
 
