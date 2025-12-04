@@ -1,0 +1,12 @@
+package ru.hogwarts.school.exception;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ResponseStatus(value = HttpStatus.NOT_FOUND)
+public class FacultyNotFoundException extends RuntimeException {
+
+    public FacultyNotFoundException(Long id) {
+        super("Факультет " + id + " не найден!");
+    }
+}
