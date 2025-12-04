@@ -1,11 +1,15 @@
 package ru.hogwarts.school.controller;
 
-import jakarta.validation.constraints.NotNull;
+
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.web.bind.annotation.*;
+
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.StudentService;
 
 import java.util.Collection;
+
 
 
 @RestController
@@ -20,11 +24,6 @@ public class StudentController {
     @GetMapping("/{id}")
     public Student getStudent(@PathVariable Long id) {
         return studentService.findStudent(id);
-    }
-
-    @GetMapping("/filter")
-    public Collection<Student> filterByAge(@RequestParam @NotNull Integer age) {
-        return studentService.findByAge(age);
     }
 
     @PostMapping
@@ -46,4 +45,20 @@ public class StudentController {
     public Collection<Student> allStudentsInfo() {
         return studentService.getAllStudents();
     }
+
+    @GetMapping("/age")
+    public Collection<Student> filterByAgeBetween(@RequestParam @Min(0) int ageMin,
+                                                  @RequestParam @Min(0) int ageMax) {
+        return studentService.findByAgeBetween(ageMin, ageMax);
+    }
+
+    @GetMapping("/faculty/{facultyId}/students")
+    public Collection<Student> filterByFacultyId(@PathVariable Long facultyId){
+        return studentService.findAllStudentsByFacultyId(facultyId);
+    }
+    @GetMapping("/{studentId}/faculty")
+    public String getFacultyNameByStudentId (@PathVariable Long studentId){
+        return studentService.getFacultyByStudentId(studentId);
+    }
 }
+
