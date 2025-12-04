@@ -37,20 +37,11 @@ public class FacultyService {
         return facultyRepository.save(faculty);
     }
 
-    public Collection<Faculty> findByColorOrName(String color, String name) {
-        if (color != null && name != null) {
-            return facultyRepository.findByColorOrNameContainingIgnoreCase(color, name);
-        } else if (color != null) {
-            return facultyRepository.findByColorContainingIgnoreCase(color);
-        } else if (name != null) {
-            return facultyRepository.findByNameContainingIgnoreCase(name);
-        } else {
-            return null;
-        }
+    public Collection<Faculty> findByColor(String color) {
+        return facultyRepository.findByColorContainingIgnoreCase(color);
     }
 
     public Collection<Faculty> getAllFaculties() {
         return facultyRepository.findAll();
     }
 }
-

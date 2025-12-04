@@ -1,31 +1,27 @@
 package ru.hogwarts.school.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
-import java.util.Collection;
 import java.util.Objects;
 
 @Entity
 public class Student {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
     private int age;
-    @ManyToOne
-    @JoinColumn(name = "faculty_id")
-    private Faculty faculty;
-
 
     public Student() {
     }
 
-    public Student(String name, int age, Faculty faculty) {
+    public Student(String name, int age) {
         this.name = name;
         this.age = age;
-        this.faculty = faculty;
     }
 
     @Override
@@ -34,7 +30,6 @@ public class Student {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", age=" + age +
-                ", faculty=" + faculty +
                 '}';
     }
 
@@ -42,12 +37,12 @@ public class Student {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Student student = (Student) o;
-        return getAge() == student.getAge() && Objects.equals(getId(), student.getId()) && Objects.equals(getName(), student.getName()) && Objects.equals(getFaculty(), student.getFaculty());
+        return Objects.equals(getId(),student.getId()) && getAge() == student.getAge() && Objects.equals(getName(), student.getName());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getName(), getAge(), getFaculty());
+        return Objects.hash(getId(), getName(), getAge());
     }
 
     public Long getId() {
@@ -72,13 +67,5 @@ public class Student {
 
     public void setAge(int age) {
         this.age = age;
-    }
-
-    public Faculty getFaculty() {
-        return faculty;
-    }
-
-    public void setFaculty(Faculty faculty) {
-        this.faculty = faculty;
     }
 }
