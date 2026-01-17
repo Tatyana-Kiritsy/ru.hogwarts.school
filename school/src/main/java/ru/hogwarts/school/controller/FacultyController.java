@@ -46,6 +46,5 @@ public class FacultyController {
     public Collection<Faculty> allFacultiesInfo() {
         return facultyService.getAllFaculties();
     }
-
 }
 
