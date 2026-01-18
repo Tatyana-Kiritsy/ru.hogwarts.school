@@ -1,6 +1,5 @@
 package ru.hogwarts.school.controller;
 
-
 import jakarta.validation.constraints.Min;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.model.Student;
