@@ -65,4 +65,16 @@ public class StudentService {
         return studentRepository.findFacultyNameById(studentId)
                 .orElseThrow(() -> new FacultyNameByStudentIdNotFoundException(studentId));
     }
+
+    public long countAllStudents (){
+        return studentRepository.countStudents();
+    }
+
+    public int countAverageAge (){
+        return studentRepository.countAverageStudentsAge();
+    }
+
+    public Collection<Student> getFiveLastStudents() {
+        return studentRepository.findFiveLastStudents();
+    }
 }
