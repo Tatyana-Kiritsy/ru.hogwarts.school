@@ -1,5 +1,7 @@
 package ru.hogwarts.school.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.exception.FacultyNameByStudentIdNotFoundException;
 import ru.hogwarts.school.exception.StudentNotFoundException;
@@ -14,50 +16,60 @@ public class StudentService {
 
     private final StudentRepository studentRepository;
 
+    private final  Logger logger = LoggerFactory.getLogger(StudentService.class);
+
     public StudentService(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
     }
 
     public Student createStudent(Student student) {
+        logger.info("CreateStudent method was invoked");
         student.setId(null);
         return studentRepository.save(student);
     }
 
     public Student findStudent(Long id) {
-
+        logger.info("FindStudent method was invoked");
         return studentRepository.findById(id).orElseThrow(() -> new StudentNotFoundException(id));
     }
 
     public void removeStudent(Long id) {
+        logger.info("RemoveStudent method was invoked");
         findStudent(id);
         studentRepository.deleteById(id);
     }
 
     public Student editStudent(Long id, Student student) {
+        logger.info("EditStudent method was invoked");
         findStudent(id);
         student.setId(id);
         return studentRepository.save(student);
     }
 
     public Collection<Student> getAllStudents() {
+        logger.info("GetAllStudents method was invoked");
         return studentRepository.findAll();
     }
 
     public Collection<Student> findByAgeBetween(int ageMin, int ageMax) {
         if (ageMin < 0 || ageMax < 0) {
+            logger.error("Age must be positive!");
             throw new IllegalArgumentException("Возраст не может быть отрицательным!");
         }
         if (ageMin > ageMax) {
+            logger.error("Wrong age order!");
             throw new IllegalArgumentException("Минимальный возраст не может " +
                     "быть больше максимального!");
         }
         Collection<Student> allStudentsByAgeBetween = getAllStudents();
+        logger.info("FindByAge method was invoked");
         return allStudentsByAgeBetween.stream()
                 .filter(s -> s.getAge() >= ageMin && s.getAge() <= ageMax)
                 .toList();
     }
 
     public Collection<Student> findAllStudentsByFacultyId(Long facultyId) {
+        logger.info("FindAllStudentsByFacultyId method was invoked");
         return studentRepository.findByFacultyId(facultyId);
     }
 
@@ -66,15 +78,18 @@ public class StudentService {
                 .orElseThrow(() -> new FacultyNameByStudentIdNotFoundException(studentId));
     }
 
-    public long countAllStudents (){
+    public long countAllStudents() {
+        logger.info("CountAllStudents method was invoked");
         return studentRepository.countStudents();
     }
 
-    public int countAverageAge (){
+    public int countAverageAge() {
+        logger.info("CountAverageAge method was invoked");
         return studentRepository.countAverageStudentsAge();
     }
 
     public Collection<Student> getFiveLastStudents() {
+        logger.info("GetFiveLastStudents method was invoked");
         return studentRepository.findFiveLastStudents();
     }
 }
