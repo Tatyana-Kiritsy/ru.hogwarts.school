@@ -20,6 +20,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collection;
 import java.util.Objects;
+import java.util.stream.LongStream;
+import java.util.stream.Stream;
 
 import static java.nio.file.StandardOpenOption.CREATE_NEW;
 
@@ -102,6 +104,36 @@ public class AvatarService {
             ImageIO.write(preview, getExtension(filePath.getFileName().toString()), baos);
             return baos.toByteArray();
         }
+    }
+
+    public long getFirstLong() {
+        long firstStart = System.currentTimeMillis();
+
+        logger.info("The first method invoked");
+
+        long sum = Stream.iterate(1L, a -> a + 1L)
+                .limit(1_000_000)
+                .reduce(0L, Long::sum);
+        long firstFinish = System.currentTimeMillis() - firstStart;
+
+        logger.info("The first method time {}", firstFinish);
+
+        return sum;
+    }
+
+    public long getSecondLong() {
+        long secondStart = System.currentTimeMillis();
+
+        logger.info("The second method invoked");
+
+        long sum = LongStream.rangeClosed(1, 1_000_000).parallel()
+                .reduce(0L, Long::sum);
+
+        long secondFinish = System.currentTimeMillis() - secondStart;
+
+        logger.info("The second method time {}", secondFinish);
+
+        return sum;
     }
 
     public String getExtension(String fileName) {
