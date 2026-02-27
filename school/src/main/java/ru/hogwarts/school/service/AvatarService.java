@@ -1,5 +1,7 @@
 package ru.hogwarts.school.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -32,6 +34,8 @@ public class AvatarService {
     final private AvatarRepository avatarRepository;
     final private StudentRepository studentRepository;
 
+    private final Logger logger = LoggerFactory.getLogger(AvatarService.class);
+
     public AvatarService(AvatarRepository avatarRepository, StudentRepository studentRepository) {
         this.avatarRepository = avatarRepository;
         this.studentRepository = studentRepository;
@@ -52,10 +56,12 @@ public class AvatarService {
 
 
     public Avatar findAvatar(Long studentId) {
+        logger.info("FindAvatar method was invoked");
         return avatarRepository.findByStudentId(studentId).orElse(new Avatar());
     }
 
     public void uploadAvatar(Long studentId, MultipartFile file) throws IOException {
+        logger.info("UploadAvatar method was invoked");
         Student student = studentRepository.getById(studentId);
 
         Path filePath = Path.of(avatarsDir, studentId + "." + getExtension(Objects.requireNonNull(file.getOriginalFilename())));
@@ -82,6 +88,7 @@ public class AvatarService {
     }
 
     public byte[] generateDataForDB(Path filePath) throws IOException {
+        logger.info("GenerateDataForDB method was invoked");
         try (
                 InputStream is = Files.newInputStream(filePath);
                 BufferedInputStream bis = new BufferedInputStream(is, 1024);
@@ -99,16 +106,20 @@ public class AvatarService {
 
     public String getExtension(String fileName) {
         if (fileName == null) {
+            logger.error("Fill in filename!");
             throw new IllegalArgumentException("Имя файла не должно быть пустым!");
         }
         int dotIndex = fileName.lastIndexOf(".");
         if (dotIndex == -1 || dotIndex == fileName.length() - 1) {
+            logger.error("Invalid filename! Extension is blank!");
             throw new IllegalArgumentException("Некорректное имя файла " + fileName + " , отсутсвует расширение!");
         }
+        logger.info("getExtension method was invoked");
         return fileName.substring(dotIndex + 1);
     }
 
     public Collection<Avatar> getAllAvatars(Integer pageNumber, Integer pageSize) {
+        logger.info("GetAllAvatars method was invoked");
         PageRequest pageRequest = PageRequest.of(pageNumber - 1, pageSize);
         return avatarRepository.findAll(pageRequest).getContent();
     }
