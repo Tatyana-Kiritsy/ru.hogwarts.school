@@ -16,7 +16,7 @@ public class StudentService {
 
     private final StudentRepository studentRepository;
 
-    private final  Logger logger = LoggerFactory.getLogger(StudentService.class);
+    private final Logger logger = LoggerFactory.getLogger(StudentService.class);
 
     public StudentService(StudentRepository studentRepository) {
         this.studentRepository = studentRepository;
@@ -68,6 +68,17 @@ public class StudentService {
                 .toList();
     }
 
+    public Collection<String> getStudentNamesStartedWith(String letter) {
+        logger.info("GetStudentNamesStartedWith method was invoked");
+        return studentRepository.findAll()
+                .stream()
+                .map(Student::getName)
+                .filter(name -> name.toUpperCase()
+                        .startsWith(letter.toUpperCase()))
+                .sorted()
+                .toList();
+    }
+
     public Collection<Student> findAllStudentsByFacultyId(Long facultyId) {
         logger.info("FindAllStudentsByFacultyId method was invoked");
         return studentRepository.findByFacultyId(facultyId);
@@ -91,5 +102,19 @@ public class StudentService {
     public Collection<Student> getFiveLastStudents() {
         logger.info("GetFiveLastStudents method was invoked");
         return studentRepository.findFiveLastStudents();
+    }
+
+    public int getAverageAge() {
+        logger.info("GetAverageAge method was invoked");
+
+        List<Student> students = studentRepository.findAll();
+        if (students.isEmpty()) {
+            throw new IllegalStateException("No students found");
+        }
+        return (int) Math.round(studentRepository.findAll()
+                .stream()
+                .mapToDouble(Student::getAge)
+                .average()
+                .orElseThrow());
     }
 }

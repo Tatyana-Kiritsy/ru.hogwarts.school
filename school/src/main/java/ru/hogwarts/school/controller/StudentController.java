@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Min;
 import org.springframework.web.bind.annotation.*;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.service.StudentService;
+
 import java.util.Collection;
 
 
@@ -57,19 +58,29 @@ public class StudentController {
     public String getFacultyNameByStudentId(@PathVariable Long studentId) {
         return studentService.getFacultyByStudentId(studentId);
     }
+
     @GetMapping("/count")
-    public long countAllStudents (){
+    public long countAllStudents() {
         return studentService.countAllStudents();
     }
 
     @GetMapping("/AvgAge")
-    public int countAverageStudentsAge (){
+    public int countAverageStudentsAge() {
         return studentService.countAverageAge();
     }
 
     @GetMapping("/fiveLast")
-    public Collection <Student> getFiveLastStudents() {
+    public Collection<Student> getFiveLastStudents() {
         return studentService.getFiveLastStudents();
     }
 
+    @GetMapping("/startedWith")
+    public Collection<String> getStudentNamesStartedWith(@RequestParam String letter) {
+        return studentService.getStudentNamesStartedWith(letter);
+    }
+
+    @GetMapping("/AvgAgeStream")
+    public int getAverageStudentsAge() {
+        return studentService.getAverageAge();
+    }
 }
